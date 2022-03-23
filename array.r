@@ -142,7 +142,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 	# Done
 	print(paste(as.character(num_stations_read), "stations processed altogether."))
 	print(paste("Mean: ", mean(slopes)))
-	print(paste("+/=: ", sd(slopes)))
+	print(paste("+/-: ", sd(slopes)))
 
 	close(f)
 }
