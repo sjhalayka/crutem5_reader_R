@@ -126,8 +126,6 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			x_count = x_count + 1
 		}
 
-		# These two division ops can be commented out,
-		# since it's the ratio that matters
 		covariance = covariance / x_count
 		variance = variance / x_count
 		slopes = c(slopes, covariance / variance)
