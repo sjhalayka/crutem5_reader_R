@@ -92,13 +92,6 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			x = c(x, year_years[[i]]); y = c(y, year_dec[[i]]);
 		}
 	
-		# Go to next station if this one hasn't enough data
-		if(length(x) < min_samples_per_slope)
-		{
-			#print(paste("Not enough data for station ", name, country))
-			next
-		}
-
 
 		# Get mean
 		x_mean = mean(x, na.rm=TRUE)
@@ -126,7 +119,18 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 		covariance = covariance / x_count
 		variance = variance / x_count
-		slopes = c(slopes, covariance / variance)
+
+		# Go to next station if this one hasn't enough valid xy data
+		if(x_count < min_samples_per_slope)
+		{
+			#print(paste("Not enough data for station ", name, country))
+			next
+		}
+		else
+		{
+			# Save this station's trend
+			slopes = c(slopes, covariance / variance)
+		}
 	}
 
 
