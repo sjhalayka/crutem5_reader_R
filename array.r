@@ -107,8 +107,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		y_mean = mean(y, na.rm=TRUE)
 
 		covariance = 0
-		variance = 0	
-
+		variance = 0
 		x_count = 0
 
 		for(i in 1:length(x))
@@ -122,6 +121,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 			x_count = x_count + 1
 		}
+
+		cov_matrix = cov(x, y, na.rm=TRUE)
+
+		print(cov_matrix)
 
 		# These two division ops can be commented out,
 		# since it's the ratio that matters
