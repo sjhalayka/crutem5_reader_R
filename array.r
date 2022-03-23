@@ -82,6 +82,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			next
 		}
 
+
 		x = c()
 		y = c()
 
@@ -102,10 +103,13 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			x = c(x, year_years[[i]]); y = c(y, year_dec[[i]]);
 		}
 
+
 		# Get mean
 		x_mean = mean(x, na.rm=TRUE)
 		y_mean = mean(y, na.rm=TRUE)
 
+
+		# Get covariance and variance
 		covariance = 0
 		variance = 0
 		x_count = 0
@@ -122,16 +126,14 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			x_count = x_count + 1
 		}
 
-		cov_matrix = cov(x, y, na.rm=TRUE)
-
-		print(cov_matrix)
-
 		# These two division ops can be commented out,
 		# since it's the ratio that matters
 		covariance = covariance / x_count
 		variance = variance / x_count
 		slopes = c(slopes, covariance / variance)
 
+
+		# Update the status
 		num_stations_read = num_stations_read + 1
 
 		if(num_stations_read %% 1000 == 0)
