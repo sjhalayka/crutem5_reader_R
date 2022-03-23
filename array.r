@@ -71,7 +71,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			print(paste(as.character(num_stations_read), "stations processed."))
 
 			
-		# Gather up xy data for all years for this station,
+		# Gather up xy point data for all years for this station,
 		# where x is the year and y is the temp anomaly
 		x = c()
 		y = c()
