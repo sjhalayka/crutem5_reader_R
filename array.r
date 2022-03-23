@@ -4,6 +4,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 	f = file("stat4.postqc.CRUTEM.5.0.1.0-202109.txt", "r")
 
 	min_years_per_slope = 20
+	slopes = c()
 
 	num_stations_read = 0
 
@@ -41,16 +42,18 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			year_line = readLines(f, n = 1)
 			year_tokens = strsplit(year_line, " +")
 
-			year = year_tokens[[1]][1]
+			year = as.integer(year_tokens[[1]][1])
 			t_anomalies = list(1, 12)
 
 			# For each month in the year
 			for(j in 1:12)
 			{
-				t_anomalies[[j]] = year_tokens[[1]][j + 1]
+				token = year_tokens[[1]][j + 1]
 
-				if(t_anomalies[[j]] == "-999")
-					t_anomalies[[j]] = NA
+				if(token == "-999")
+					token = NA
+
+				t_anomalies[[j]] = as.integer(token)
 			}
 
 			# Store all of this station's year data, if it's not all NAs that is
@@ -71,40 +74,70 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 				year_oct = c(year_oct, t_anomalies[[10]]); year_nov = c(year_nov, t_anomalies[[11]]); year_dec = c(year_dec, t_anomalies[[12]]);
 			}
 		}
-
-		num_stations_read = num_stations_read + 1
-
-		if(num_stations_read %% 1000 == 0)
-			print(paste(as.character(num_stations_read), "stations processed."))
-
-		# Only consider a station if it has enough year data
+		
+		# Only consider a station if it has enough years' worth of data
 		if(length(year_station_ids) < min_years_per_slope)
 		{
 			#print("skipping station -- not enough data")
 			next
 		}
 
+		x = c()
+		y = c()
 
-		#print(as.character(station_id_int))
-		#print(name)
-		#print(country)
-		#print(as.character(first_year_int))
-		#print(as.character(last_year_int))
+		# Gather up xy data	for all years for this station
+		for(i in 1:length(year_station_ids))
+		{
+			x = c(x, year_years[[i]]); y = c(y, year_jan[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_feb[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_mar[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_apr[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_may[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_jun[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_jul[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_aug[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_sep[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_oct[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_nov[[i]]);
+			x = c(x, year_years[[i]]); y = c(y, year_dec[[i]]);
+		}
 
-		# For each year
-		#for(i in 1:lengths(year_station_ids))
-		#{
-		#	print(year_station_ids[[i]])
-		#}
+		# Get mean
+		x_mean = mean(x, na.rm=TRUE)
+		y_mean = mean(y, na.rm=TRUE)
 
+		covariance = 0
+		variance = 0	
 
+		x_count = 0
 
+		for(i in 1:length(x))
+		{
+			if(is.na(x[[i]]) || is.na(y[[i]]))
+				next
+
+			z = x[[i]] - x_mean;
+			covariance = covariance + z*(y[[i]] - y_mean);
+			variance = variance + z*z;
+
+			x_count = x_count + 1
+		}
+
+		# These two division ops can be commented out,
+		# since it's the ratio that matters
+		covariance = covariance / x_count
+		variance = variance / x_count
+		slopes = c(slopes, covariance / variance)
+
+		num_stations_read = num_stations_read + 1
+
+		if(num_stations_read %% 1000 == 0)
+			print(paste(as.character(num_stations_read), "stations processed."))
 	}
 
 	print(paste(as.character(num_stations_read), "stations processed altogether."))
-	
-
-
+	print(paste("Mean: ", mean(slopes)))
+	print(paste("+/=: ", sd(slopes)))
 
 	close(f)
 }
