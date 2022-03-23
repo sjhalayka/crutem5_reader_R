@@ -75,12 +75,13 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		if(num_stations_read %% 1000 == 0)
 			print(paste(as.character(num_stations_read), "stations processed."))
 
-
 		# Parse this station and its year data
 
-		# Only consider a station if it's old enough
+		# Only consider a station if it has enough year data
 		if(num_years < min_years_per_slope)
 			next
+
+
 
 		#print(as.character(station_id_int))
 		#print(name)
