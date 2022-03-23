@@ -42,32 +42,34 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			year_tokens = strsplit(year_line, " +")
 
 			year = year_tokens[[1]][1]
-			temperature_anomalies = list(1, 12)
+			t_anomalies = list(1, 12)
 
 			# For each month in the year
 			for(j in 1:12)
 			{
-				temperature_anomalies[[j]] = year_tokens[[1]][j + 1]
+				t_anomalies[[j]] = year_tokens[[1]][j + 1]
 
-				if(temperature_anomalies[[j]] == "-999")
-					temperature_anomalies[[j]] = NA
+				if(t_anomalies[[j]] == "-999")
+					t_anomalies[[j]] = NA
 			}
 
-			# Store all of this station's year data
-			year_station_ids = c(year_station_ids, station_id_int)
-					year_years = c(year_years, year)
-					year_jan = c(year_jan, temperature_anomalies[[1]])
-					year_feb = c(year_feb, temperature_anomalies[[2]])
-					year_mar = c(year_mar, temperature_anomalies[[3]])
-					year_apr = c(year_apr, temperature_anomalies[[4]])
-					year_may = c(year_may, temperature_anomalies[[5]])
-					year_jun = c(year_jun, temperature_anomalies[[6]])
-					year_jul = c(year_jul, temperature_anomalies[[7]])
-					year_aug = c(year_aug, temperature_anomalies[[8]])
-					year_sep = c(year_sep, temperature_anomalies[[9]])
-					year_oct = c(year_oct, temperature_anomalies[[10]])
-					year_nov = c(year_nov, temperature_anomalies[[11]])
-					year_dec = c(year_dec, temperature_anomalies[[12]])
+			# Store all of this station's year data, if it's not all NAs that is
+			if(	is.na(t_anomalies[[1]]) && is.na(t_anomalies[[2]]) && is.na(t_anomalies[[3]]) &&
+				is.na(t_anomalies[[4]]) && is.na(t_anomalies[[5]]) && is.na(t_anomalies[[6]]) &&
+				is.na(t_anomalies[[7]]) && is.na(t_anomalies[[8]]) && is.na(t_anomalies[[9]]) &&
+				is.na(t_anomalies[[10]]) && is.na(t_anomalies[[11]]) && is.na(t_anomalies[[12]]))
+			{
+				#print("skipping empty year")
+			}
+			else
+			{
+				year_station_ids = c(year_station_ids, station_id_int)
+						year_years = c(year_years, year)
+						year_jan = c(year_jan, t_anomalies[[1]]); year_feb = c(year_feb, t_anomalies[[2]]); year_mar = c(year_mar, t_anomalies[[3]])
+						year_apr = c(year_apr, t_anomalies[[4]]); year_may = c(year_may, t_anomalies[[5]]); year_jun = c(year_jun, t_anomalies[[6]]); 
+						year_jul = c(year_jul, t_anomalies[[7]]); year_aug = c(year_aug, t_anomalies[[8]]); year_sep = c(year_sep, t_anomalies[[9]]); 
+						year_oct = c(year_oct, t_anomalies[[10]]); year_nov = c(year_nov, t_anomalies[[11]]); year_dec = c(year_dec, t_anomalies[[12]]);
+			}
 		}
 
 		num_stations_read = num_stations_read + 1
@@ -75,12 +77,12 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		if(num_stations_read %% 1000 == 0)
 			print(paste(as.character(num_stations_read), "stations processed."))
 
-		# Parse this station and its year data
-
 		# Only consider a station if it has enough year data
-		if(num_years < min_years_per_slope)
+		if(length(year_station_ids) < min_years_per_slope)
+		{
+			#print("skipping station -- not enough data")
 			next
-
+		}
 
 
 		#print(as.character(station_id_int))
