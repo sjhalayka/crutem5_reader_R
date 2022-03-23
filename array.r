@@ -75,6 +75,13 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			}
 		}
 		
+		# Update the status
+		num_stations_read = num_stations_read + 1
+
+		if(num_stations_read %% 1000 == 0)
+			print(paste(as.character(num_stations_read), "stations processed."))
+
+
 		# Only consider a station if it has enough years' worth of data
 		if(length(year_station_ids) < min_years_per_slope)
 		{
@@ -129,15 +136,9 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		covariance = covariance / x_count
 		variance = variance / x_count
 		slopes = c(slopes, covariance / variance)
-
-
-		# Update the status
-		num_stations_read = num_stations_read + 1
-
-		if(num_stations_read %% 1000 == 0)
-			print(paste(as.character(num_stations_read), "stations processed."))
 	}
 
+	# Done
 	print(paste(as.character(num_stations_read), "stations processed altogether."))
 	print(paste("Mean: ", mean(slopes)))
 	print(paste("+/=: ", sd(slopes)))
