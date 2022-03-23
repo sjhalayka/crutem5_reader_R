@@ -54,10 +54,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			}
 
 			# Store all of this station's year data, if it's not all NAs that is
-			if(	is.na(t_anomalies[[1]]) && is.na(t_anomalies[[2]]) && is.na(t_anomalies[[3]]) &&
-				is.na(t_anomalies[[4]]) && is.na(t_anomalies[[5]]) && is.na(t_anomalies[[6]]) &&
-				is.na(t_anomalies[[7]]) && is.na(t_anomalies[[8]]) && is.na(t_anomalies[[9]]) &&
-				is.na(t_anomalies[[10]]) && is.na(t_anomalies[[11]]) && is.na(t_anomalies[[12]]))
+			if(is.na(t_anomalies[[1]]) && is.na(t_anomalies[[2]]) && is.na(t_anomalies[[3]]) &&
+			is.na(t_anomalies[[4]]) && is.na(t_anomalies[[5]]) && is.na(t_anomalies[[6]]) &&
+			is.na(t_anomalies[[7]]) && is.na(t_anomalies[[8]]) && is.na(t_anomalies[[9]]) &&
+			is.na(t_anomalies[[10]]) && is.na(t_anomalies[[11]]) && is.na(t_anomalies[[12]]))
 			{
 				#print("skipping empty year")
 			}
