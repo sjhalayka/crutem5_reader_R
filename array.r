@@ -36,6 +36,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		year_jul = c(); year_aug = c(); year_sep = c();
 		year_oct = c(); year_nov = c(); year_dec = c();
 
+		# For each year
 		for(i in 1:num_years)
 		{
 			# Year data columns are delimited by space(s)
@@ -56,6 +57,8 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 				t_anomalies[[j]] = as.integer(token)
 			}
 
+			# Store the year's data
+			# We will worry about NA data later
 			year_station_ids = c(year_station_ids, station_id_int)
 			year_years = c(year_years, year)
 			year_jan = c(year_jan, t_anomalies[[1]]); year_feb = c(year_feb, t_anomalies[[2]]); year_mar = c(year_mar, t_anomalies[[3]])
