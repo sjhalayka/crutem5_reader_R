@@ -71,7 +71,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			print(paste(as.character(num_stations_read), "stations processed."))
 
 			
-		# Gather up xy data	for all years for this station,
+		# Gather up xy data for all years for this station,
 		# where x is the year and y is the temp anomaly
 		x = c()
 		y = c()
@@ -98,10 +98,11 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		y_mean = mean(y, na.rm=TRUE)
 
 
-		# Get covariance and variance
+		# Get covariance and variance,
+		# and valid xy point count
 		covariance = 0
 		variance = 0
-		x_count = 0
+		valid_xy_count = 0
 
 		for(i in 1:length(x))
 		{
@@ -114,14 +115,15 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			covariance = covariance + z*(y[[i]] - y_mean);
 			variance = variance + z*z;
 
-			x_count = x_count + 1
+			valid_xy_count = valid_xy_count + 1
 		}
 
-		covariance = covariance / x_count
-		variance = variance / x_count
+		covariance = covariance / valid_xy_count
+		variance = variance / valid_xy_count
+
 
 		# Go to next station if this one hasn't enough valid xy data
-		if(x_count < min_samples_per_slope)
+		if(valid_xy_count < min_samples_per_slope)
 		{
 			#print(paste("Not enough data for station ", name, country))
 			next
