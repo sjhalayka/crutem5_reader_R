@@ -3,7 +3,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 {
 	f = file("stat4.postqc.CRUTEM.5.0.1.0-202109.txt", "r")
 
-	min_samples_per_slope = 12*20 
+	min_samples_per_slope = 12*20 # 12 months * 20 years
 	slopes = c()
 
 	num_stations_read = 0
@@ -112,6 +112,8 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 		for(i in 1:length(x))
 		{
+			# Go to next xy point if this one 
+			# contains invalid data
 			if(is.na(x[[i]]) || is.na(y[[i]]))
 				next
 
@@ -126,6 +128,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		variance = variance / x_count
 		slopes = c(slopes, covariance / variance)
 	}
+
 
 	# Done
 	print(paste(as.character(num_stations_read), "stations processed altogether."))
