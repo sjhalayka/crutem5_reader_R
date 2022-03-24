@@ -3,7 +3,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 {
 	f = file("stat4.postqc.CRUTEM.5.0.1.0-202109.txt", "r")
 
-	min_samples_per_slope = 12*20 # 12 months * 20 years
+	min_samples_per_station = 12*20 # 12 months * 20 years
+	min_year = 1900 # Try 1980 for short term warming
+	max_year = 2022
+
 	trends = c()
 
 	num_stations_read = 0
@@ -44,9 +47,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			year_tokens = strsplit(year_line, " +")
 
 			year = as.integer(year_tokens[[1]][1])
+
 			t_anomalies = list(1, 12)
 
-			# For each month in the year
+			# For each month in the year, get temp anomaly
 			for(j in 1:12)
 			{
 				token = year_tokens[[1]][j + 1]
@@ -80,6 +84,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 		for(i in 1:length(year_years))
 		{
+			# Why does this break the system?
+			#if(year_years[[i]] < min_year || year_years[[i]] > max_year)
+			#	next
+
 			x = c(x, year_years[[i]]); y = c(y, year_jan[[i]]);
 			x = c(x, year_years[[i]]); y = c(y, year_feb[[i]]);
 			x = c(x, year_years[[i]]); y = c(y, year_mar[[i]]);
@@ -105,12 +113,13 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			# contains invalid data
 			if(is.na(x[[i]]) || is.na(y[[i]]))
 				next
-			
+
 			valid_xy_count = valid_xy_count + 1
 		}
 
+
 		# Go to next station if this one hasn't enough valid xy data
-		if(valid_xy_count < min_samples_per_slope)
+		if(valid_xy_count < min_samples_per_station)
 		{
 			#print(paste("Not enough data for station ", name, country))
 			next
