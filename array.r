@@ -69,7 +69,6 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		# Update the status
 		num_stations_read = num_stations_read + 1
 
-		
 		if(num_stations_read %% 1000 == 0)
 			print(paste(as.character(num_stations_read), "stations processed."))
 
