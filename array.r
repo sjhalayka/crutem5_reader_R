@@ -51,7 +51,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			{
 				token = year_tokens[[1]][j + 1]
 
-				if(token == "-999")
+				if(token == "-999") # -999 indicates missing record
 					token = NA
 
 				t_anomalies[[j]] = as.integer(token)
