@@ -69,6 +69,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		# Update the status
 		num_stations_read = num_stations_read + 1
 
+		
 		if(num_stations_read %% 1000 == 0)
 			print(paste(as.character(num_stations_read), "stations processed."))
 
@@ -95,17 +96,9 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		}
 	
 
-		# Get mean
-		x_mean = mean(x, na.rm=TRUE)
-		y_mean = mean(y, na.rm=TRUE)
-
-
-		# Get covariance and variance,
-		# and valid xy point count
-		covariance = 0
-		variance = 0
+		# Get valid xy point count
 		valid_xy_count = 0
-
+	
 		# For each xy point
 		for(i in 1:length(x))
 		{
@@ -113,18 +106,9 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			# contains invalid data
 			if(is.na(x[[i]]) || is.na(y[[i]]))
 				next
-
-			# Basic statistics
-			z = x[[i]] - x_mean
-			covariance = covariance + z*(y[[i]] - y_mean)
-			variance = variance + z*z
-
+			
 			valid_xy_count = valid_xy_count + 1
 		}
-
-		covariance = covariance / valid_xy_count
-		variance = variance / valid_xy_count
-
 
 		# Go to next station if this one hasn't enough valid xy data
 		if(valid_xy_count < min_samples_per_slope)
@@ -135,7 +119,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		else
 		{
 			# Save this station's trend
-			slopes = c(slopes, covariance / variance)
+			slopes = c(slopes, coefficients(lm(y~x))[[2]])
 		}
 	}
 
@@ -146,6 +130,8 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 	print(paste("Mean: ", mean(slopes)))
 	print(paste("+/-: ", sd(slopes)))
+
+	warnings()
 
 	close(f)
 }
