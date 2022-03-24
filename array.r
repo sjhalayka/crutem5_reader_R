@@ -8,6 +8,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 	num_stations_read = 0
 
+
 	while(TRUE)
 	{
 		line = readLines(f, n = 1)
@@ -61,7 +62,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			# We will worry about NA data later
 			year_station_ids = c(year_station_ids, station_id_int)
 			year_years = c(year_years, year)
-			year_jan = c(year_jan, t_anomalies[[1]]); year_feb = c(year_feb, t_anomalies[[2]]); year_mar = c(year_mar, t_anomalies[[3]])
+			year_jan = c(year_jan, t_anomalies[[1]]); year_feb = c(year_feb, t_anomalies[[2]]); year_mar = c(year_mar, t_anomalies[[3]]);
 			year_apr = c(year_apr, t_anomalies[[4]]); year_may = c(year_may, t_anomalies[[5]]); year_jun = c(year_jun, t_anomalies[[6]]); 
 			year_jul = c(year_jul, t_anomalies[[7]]); year_aug = c(year_aug, t_anomalies[[8]]); year_sep = c(year_sep, t_anomalies[[9]]); 
 			year_oct = c(year_oct, t_anomalies[[10]]); year_nov = c(year_nov, t_anomalies[[11]]); year_dec = c(year_dec, t_anomalies[[12]]);
@@ -107,6 +108,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		variance = 0
 		valid_xy_count = 0
 
+		# For each xy point
 		for(i in 1:length(x))
 		{
 			# Go to next xy point if this one 
@@ -114,9 +116,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			if(is.na(x[[i]]) || is.na(y[[i]]))
 				next
 
-			z = x[[i]] - x_mean;
-			covariance = covariance + z*(y[[i]] - y_mean);
-			variance = variance + z*z;
+			# Basic statistics
+			z = x[[i]] - x_mean
+			covariance = covariance + z*(y[[i]] - y_mean)
+			variance = variance + z*z
 
 			valid_xy_count = valid_xy_count + 1
 		}
@@ -141,6 +144,8 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 	# Done
 	print(paste(as.character(num_stations_read), "stations processed altogether."))
+	print(paste(as.character(length(slopes)), "stations used."))
+
 	print(paste("Mean: ", mean(slopes)))
 	print(paste("+/-: ", sd(slopes)))
 
