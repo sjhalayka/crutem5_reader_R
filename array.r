@@ -4,7 +4,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 	f = file("stat4.postqc.CRUTEM.5.0.1.0-202109.txt", "r")
 
 	min_samples_per_slope = 12*20 # 12 months * 20 years
-	slopes = c()
+	trends = c()
 
 	num_stations_read = 0
 
@@ -119,19 +119,17 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		else
 		{
 			# Save this station's trend
-			slopes = c(slopes, coefficients(lm(y~x))[[2]])
+			trends = c(trends, coefficients(lm(y~x))[[2]])
 		}
 	}
 
 
 	# Done
 	print(paste(as.character(num_stations_read), "stations processed altogether."))
-	print(paste(as.character(length(slopes)), "stations used."))
+	print(paste(as.character(length(trends)), "stations used."))
 
-	print(paste("Mean: ", mean(slopes)))
-	print(paste("+/-: ", sd(slopes)))
-
-	warnings()
+	print(paste("Mean: ", mean(trends)))
+	print(paste("+/-: ", sd(trends)))
 
 	close(f)
 }
