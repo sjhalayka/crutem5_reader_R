@@ -76,7 +76,9 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 		if(num_stations_read %% 1000 == 0)
 			print(paste(as.character(num_stations_read), "stations processed."))
 
-			
+		
+		#print(station_id)
+
 		# Gather up xy point data for all years for this station,
 		# where x is the year and y is the temp anomaly
 		x = c()
@@ -84,9 +86,11 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 
 		for(i in 1:length(year_years))
 		{
-			# Why does this break the system?
-			#if(year_years[[i]] < min_year || year_years[[i]] > max_year)
-			#	next
+			#print(year_years[[i]])
+
+			# Skip this year if not in range
+			if(year_years[[i]] < min_year || year_years[[i]] > max_year)
+				next
 
 			x = c(x, year_years[[i]]); y = c(y, year_jan[[i]]);
 			x = c(x, year_years[[i]]); y = c(y, year_feb[[i]]);
@@ -102,6 +106,10 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 			x = c(x, year_years[[i]]); y = c(y, year_dec[[i]]);
 		}
 	
+		# No years were in the range, go to the next station
+		if(length(x) == 0)
+			next
+
 
 		# Get valid xy point count
 		valid_xy_count = 0
