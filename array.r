@@ -4,7 +4,7 @@ if(file.exists("stat4.postqc.CRUTEM.5.0.1.0-202109.txt"))
 	f = file("stat4.postqc.CRUTEM.5.0.1.0-202109.txt", "r")
 
 	min_samples_per_station = 12*20 # 12 months * 20 years
-	min_year = 1900 # Try 1980 for short term warming
+	min_year = 0 # Try 1980 for short term warming
 	max_year = 2022
 
 	trends = c()
